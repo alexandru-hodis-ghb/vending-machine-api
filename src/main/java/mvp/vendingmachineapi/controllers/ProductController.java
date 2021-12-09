@@ -3,14 +3,14 @@ package mvp.vendingmachineapi.controllers;
 import mvp.vendingmachineapi.dto.DeleteMessageResponse;
 import mvp.vendingmachineapi.dto.NewProduct;
 import mvp.vendingmachineapi.models.Product;
-import mvp.vendingmachineapi.models.User;
 import mvp.vendingmachineapi.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/v1/products")
+@RestController
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
     @Autowired
@@ -31,10 +31,9 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProduct(productId));
     }
 
-    @DeleteMapping(value = "/{userId}", produces = "application/json")
-    public ResponseEntity<DeleteMessageResponse> deleteUser(@PathVariable("userId") Long userId) {
-        return ResponseEntity.ok(productService.(userId));
+    @DeleteMapping(value = "/{productId}", produces = "application/json")
+    public ResponseEntity<DeleteMessageResponse> deleteProduct(@PathVariable("productId") Long productId) {
+        return ResponseEntity.ok(productService.deleteProduct(productId));
     }
-
 
 }

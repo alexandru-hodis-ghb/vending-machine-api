@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.userdetails.DaoAuthenticationConfigurer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -65,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
@@ -83,8 +82,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/v1/products").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/users").authenticated()
                 .antMatchers(HttpMethod.GET, "/api/v1/users/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/v1/users").authenticated()

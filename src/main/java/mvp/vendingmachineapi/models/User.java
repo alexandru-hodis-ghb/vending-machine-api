@@ -3,6 +3,7 @@ package mvp.vendingmachineapi.models;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -14,11 +15,17 @@ public class User {
     @GeneratedValue
     @Column(name = "id")
     private Long id;
+
     @Column(name = "username")
+    @NotNull
     private String username;
+
     @Column(name = "password")
+    @NotNull
     private String password;
+
     @Column(name = "deposit")
+    @NotNull
     private Integer deposit;
 
     @ElementCollection

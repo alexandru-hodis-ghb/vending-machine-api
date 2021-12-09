@@ -15,7 +15,13 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public Product createProduct(NewProduct newProduct) {
-        return null;
+        Product product = new Product();
+        product.setAmountAvailable(newProduct.getAmountAvailable());
+        product.setCost(newProduct.getCost());
+        product.setProductName(newProduct.getProductName());
+        product.setSellerId(newProduct.getSellerId());
+
+        return productRepository.save(product);
     }
 
     public Product updateProduct(Product product) {
