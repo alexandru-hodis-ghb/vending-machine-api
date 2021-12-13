@@ -2,6 +2,7 @@ package mvp.vendingmachineapi.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "products")

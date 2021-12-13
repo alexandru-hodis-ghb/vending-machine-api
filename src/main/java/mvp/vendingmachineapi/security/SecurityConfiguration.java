@@ -83,12 +83,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+
                 .antMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/users").authenticated()
+                .antMatchers(HttpMethod.POST, "/api/v1/products").authenticated()
+                .antMatchers(HttpMethod.PUT, "/api/v1/products").authenticated()
+                .antMatchers(HttpMethod.DELETE, "/api/v1/products/*").authenticated()
+
+                .antMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/v1/users/*").authenticated()
                 .antMatchers(HttpMethod.PUT, "/api/v1/users").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/api/v1/users/*").authenticated();
+
     }
 
 }
