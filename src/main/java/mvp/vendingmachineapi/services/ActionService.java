@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -57,11 +58,10 @@ public class ActionService {
                 if (product1.getAmountAvailable() < buy.getAmountOfProducts()) throw new InsufficientProducts();
                 if (user.getDeposit() < (buy.getAmountOfProducts() * product1.getCost())) throw new InsufficientFunds();
 
-                // TODO calculate change
                 BuyResponse buyResponse = new BuyResponse();
                 buyResponse.setProductId(product1.getId());
                 buyResponse.setTotalSpent(buy.getAmountOfProducts() * product1.getCost());
-                buyResponse.getChange().add(user.getDeposit() - buy.getAmountOfProducts() * product1.getCost());
+                buyResponse.setChange(calculateChange(buy.getAmountOfProducts() * product1.getCost(), user.getDeposit()));
 
                 return buyResponse;
             }
@@ -76,11 +76,43 @@ public class ActionService {
         if (optionalUser.isEmpty()) throw new UserNotFoundException();
 
         Reset reset = new Reset();
-        reset.getChange().add(optionalUser.get().getDeposit());
+        reset.setChange(calculateChange(0, optionalUser.get().getDeposit()));
 
         optionalUser.get().setDeposit(0);
         userRepository.save(optionalUser.get());
 
         return reset;
     }
+
+    private List<Integer> calculateChange(int price, int deposit) {
+        int change = deposit - price;
+
+        List<Integer> result = new ArrayList<>();
+
+        if (change == 0 || change == 5 || change == 10 || change == 25 || change == 50 || change == 100) {
+            result.add(change);
+            return result;
+        } if (change >= 100) {
+            change = collectChange(change, result, 100);
+        } if (change >= 50) {
+            change = collectChange(change, result, 50);
+        } if (change >= 25) {
+            change = collectChange(change, result, 25);
+        } if (change >= 10) {
+            change = collectChange(change, result, 10);
+        } if (change >= 5) {
+            collectChange(change, result, 5);
+        }
+
+        return result;
+    }
+
+    private int collectChange(int change, List<Integer> result, int coin) {
+        for (int i = change; i >= coin; i -= coin) {
+            result.add(coin);
+            change -= coin;
+        }
+        return change;
+    }
+
 }
